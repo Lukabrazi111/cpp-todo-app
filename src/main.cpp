@@ -5,21 +5,20 @@
 const std::string TEMP_FILE = "tmp.txt";
 
 void addTodo(std::string &todoText) {
-    std::ofstream oFile;
+    std::ofstream file(TEMP_FILE, std::ios_base::app);
 
     std::cout << "Enter your todo:";
     std::cin.ignore(); // removes chars from input buffer
     std::getline(std::cin, todoText);
 
-    oFile.open(TEMP_FILE, std::ios_base::app);
-    oFile << todoText << "\n";
+    file << todoText << "\n";
 
-    if (oFile.is_open()) {
+    if (file.is_open()) {
         system("clear");
         std::cout << "Todo added successfully!\n";
     }
 
-    oFile.close();
+    file.close();
 }
 
 void getTodos() {
@@ -41,6 +40,35 @@ void getTodos() {
     } else {
         std::cout << "Todo list is not found!";
     }
+}
+
+void searchTodo() {
+    std::ifstream file(TEMP_FILE);
+
+    std::string result;
+    std::string item;
+    std::string input;
+
+    std::cout << "Enter todo:";
+    std::cin >> input;
+
+    int itemIndex = 0;
+
+    if (file.is_open()) {
+        while (std::getline(file, item)) {
+            itemIndex++;
+            if (item == input) {
+                system("clear");
+                std::cout << "===========================" << "\n";
+                std::cout << "You find item on index! - " << itemIndex << "\n";
+                std::cout << "Item name is: " << item << "\n";
+            }
+        }
+    } else {
+        system("clear");
+        std::cout << "File not found!\n";
+        exit(404);
+    }
 
 }
 
@@ -52,6 +80,7 @@ int main() {
         std::cout << "===========================" << std::endl;
         std::cout << "1. Add todo" << std::endl;
         std::cout << "2. Get list of todos" << std::endl;
+        std::cout << "3. Search specific todo" << std::endl;
         std::cout << "6. Save and exit" << std::endl;
         std::cout << "===========================" << std::endl;
 
@@ -66,7 +95,11 @@ int main() {
             case '2':
                 getTodos();
                 break;
+            case '3':
+                searchTodo();
+                break;
             case '6':
+                system("clear");
                 std::cout << "Bye!\n";
                 break;
             default:
@@ -75,7 +108,6 @@ int main() {
                 break;
         }
     } while (op != '6');
-
 
     return 0;
 }
