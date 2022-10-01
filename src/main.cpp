@@ -45,7 +45,6 @@ void getTodos() {
 void searchTodo() {
     std::ifstream file(TEMP_FILE);
 
-    std::string result;
     std::string item;
     std::string input;
 
